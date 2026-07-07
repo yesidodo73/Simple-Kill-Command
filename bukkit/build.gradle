@@ -1,0 +1,27 @@
+plugins {
+    id "java"
+}
+
+def pluginVersion = version.toString()
+
+dependencies {
+    compileOnly "org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT"
+}
+
+sourceSets {
+    main {
+        java.srcDir(project(":common").file("src/main/java"))
+    }
+}
+
+processResources {
+    filteringCharset = "UTF-8"
+    inputs.property("version", pluginVersion)
+    filesMatching("plugin.yml") {
+        expand(version: pluginVersion)
+    }
+}
+
+jar {
+    archiveBaseName = "SimpleKillCommand-Bukkit"
+}

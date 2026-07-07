@@ -1,0 +1,13 @@
+command:
+  # The command registered by this plugin. The default overrides Minecraft's /kill.
+  name: kill
+  aliases: []
+  override-existing: true
+  # Empty permission means every player can use the command on Bukkit-compatible servers.
+  permission: ""
+
+messages:
+  player-only: "&cThis command can only be used by players."
+  already-dead: "&4You are already dead!"
+  no-permission: "&cYou do not have permission to use this command."
+  internal-error: "&cThe command could not be completed. Please contact an administrator."

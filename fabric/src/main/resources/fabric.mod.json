@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "simplekillcommand",
+  "version": "${version}",
+  "name": "Simple Kill Command",
+  "description": "Configurable self-kill command for Fabric servers.",
+  "authors": [
+    "yesidodo73"
+  ],
+  "contact": {
+    "sources": "https://github.com/yesidodo73/Simple-Kill-Plugin"
+  },
+  "license": "MIT",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "com.simplekillcommand.fabric.SimpleKillCommandFabricMod"
+    ]
+  },
+  "mixins": [
+    "simplekillcommand.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "1.21.11"
+  }
+}

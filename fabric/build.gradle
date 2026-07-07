@@ -1,0 +1,32 @@
+plugins {
+    id "fabric-loom"
+}
+
+def modVersion = version.toString()
+
+base {
+    archivesName = "SimpleKillCommand-Fabric"
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.21.11"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:0.19.3"
+}
+
+sourceSets {
+    main {
+        java.srcDir(project(":common").file("src/main/java"))
+    }
+}
+
+processResources {
+    filteringCharset = "UTF-8"
+    inputs.property("version", modVersion)
+    filesMatching("fabric.mod.json") {
+        expand(version: modVersion)
+    }
+}
+
+jar {
+}

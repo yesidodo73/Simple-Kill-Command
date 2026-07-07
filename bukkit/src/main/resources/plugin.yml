@@ -1,0 +1,5 @@
+name: SimpleKillCommand
+version: ${version}
+main: com.simplekillcommand.bukkit.SimpleKillCommandBukkitPlugin
+folia-supported: true
+description: Configurable self-kill command for Bukkit-compatible servers.

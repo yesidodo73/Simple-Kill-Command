@@ -1,0 +1,43 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            name = "Fabric"
+            url = uri("https://maven.fabricmc.net/")
+        }
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "SpigotMC"
+            url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        }
+        maven {
+            name = "CodeMC"
+            url = uri("https://repo.codemc.io/repository/maven-public/")
+        }
+        maven {
+            name = "Mojang"
+            url = uri("https://libraries.minecraft.net/")
+        }
+        maven {
+            name = "Fabric"
+            url = uri("https://maven.fabricmc.net/")
+        }
+        maven {
+            name = "Forge"
+            url = uri("https://maven.minecraftforge.net/")
+        }
+    }
+}
+
+rootProject.name = "Simple-Kill-Command"
+
+include("common")
+include("bukkit")
+include("fabric")
+include("forge")

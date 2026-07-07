@@ -1,0 +1,22 @@
+plugins {
+    id "fabric-loom" version "1.10.5" apply false
+}
+
+allprojects {
+    group = "com.simplekillcommand"
+    version = providers.gradleProperty("projectVersion").get()
+}
+
+subprojects {
+    plugins.withType(JavaPlugin).configureEach {
+        java {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }
+
+        tasks.withType(JavaCompile).configureEach {
+            options.encoding = "UTF-8"
+            options.release = 17
+        }
+    }
+}
