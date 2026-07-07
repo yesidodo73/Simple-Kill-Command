@@ -1,6 +1,7 @@
 command:
   # The command registered by this plugin. The default overrides Minecraft's /kill.
   name: kill
+  # YAML list. Example: [suicide, selfkill]
   aliases: []
   override-existing: true
   # Empty permission means every player can use the command on Bukkit-compatible servers.

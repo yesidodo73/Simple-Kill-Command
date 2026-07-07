@@ -2,7 +2,7 @@ package com.simplekillcommand.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -94,20 +94,22 @@ public final class SimpleKillCommandSettings {
     }
 
     public static void writeDefaultProperties(Path path) throws IOException {
-        Properties properties = new Properties();
-        properties.setProperty("command.name", DEFAULT_COMMAND_NAME);
-        properties.setProperty("command.aliases", "");
-        properties.setProperty("command.override-existing", "true");
-        properties.setProperty("command.permission", "");
-        properties.setProperty("command.permission-level", "0");
-        properties.setProperty("messages.player-only", DEFAULT_PLAYER_ONLY_MESSAGE);
-        properties.setProperty("messages.already-dead", DEFAULT_ALREADY_DEAD_MESSAGE);
-        properties.setProperty("messages.no-permission", DEFAULT_NO_PERMISSION_MESSAGE);
-        properties.setProperty("messages.internal-error", DEFAULT_INTERNAL_ERROR_MESSAGE);
+        String content = String.join(System.lineSeparator(),
+                "# Simple Kill Command configuration",
+                "command.name=" + DEFAULT_COMMAND_NAME,
+                "# Separate aliases with commas. Example: command.aliases=suicide,selfkill",
+                "command.aliases=",
+                "command.override-existing=true",
+                "command.permission=",
+                "command.permission-level=0",
+                "messages.player-only=" + DEFAULT_PLAYER_ONLY_MESSAGE,
+                "messages.already-dead=" + DEFAULT_ALREADY_DEAD_MESSAGE,
+                "messages.no-permission=" + DEFAULT_NO_PERMISSION_MESSAGE,
+                "messages.internal-error=" + DEFAULT_INTERNAL_ERROR_MESSAGE,
+                ""
+        );
 
-        try (OutputStream output = Files.newOutputStream(path)) {
-            properties.store(output, "Simple Kill Command configuration");
-        }
+        Files.writeString(path, content, StandardCharsets.UTF_8);
     }
 
     public String commandName() {

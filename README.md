@@ -43,6 +43,7 @@ The default command name is `kill`. Set `command.name` to use another command in
 ```yaml
 command:
   name: kill
+  # YAML list. Example: [suicide, selfkill]
   aliases: []
   override-existing: true
   permission: ""
@@ -61,6 +62,8 @@ command.override-existing=true
 command.permission=
 command.permission-level=0
 ```
+
+`command.aliases` is comma-separated in the Fabric and Forge properties file. Example: `command.aliases=suicide,selfkill`.
 
 `command.permission-level` is the Minecraft command permission level, clamped to `0` through `4`. Leave it at `0` to allow every player to use the command.
 

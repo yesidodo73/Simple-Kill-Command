@@ -1,7 +1,10 @@
 package com.simplekillcommand.common;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,6 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 final class SimpleKillCommandSettingsTest {
+
+    @TempDir
+    private Path tempDir;
 
     @Test
     void normalizesCommandLabelsAndAliases() {
@@ -35,5 +41,30 @@ final class SimpleKillCommandSettingsTest {
     void clampsPermissionLevelToMinecraftRange() {
         assertEquals(0, SimpleKillCommandSettings.builder().permissionLevel(-10).build().permissionLevel());
         assertEquals(4, SimpleKillCommandSettings.builder().permissionLevel(99).build().permissionLevel());
+    }
+
+    @Test
+    void loadsCommaSeparatedAliasesFromProperties() throws Exception {
+        Path config = tempDir.resolve("simplekillcommand.properties");
+        Files.writeString(config, String.join(System.lineSeparator(),
+                "command.name=kill",
+                "command.aliases=suicide,selfkill",
+                ""
+        ));
+
+        SimpleKillCommandSettings settings = SimpleKillCommandSettings.loadProperties(config);
+
+        assertEquals(Arrays.asList("suicide", "selfkill"), settings.aliases());
+    }
+
+    @Test
+    void writesAliasSeparatorHintToDefaultProperties() throws Exception {
+        Path config = tempDir.resolve("simplekillcommand.properties");
+
+        SimpleKillCommandSettings.loadProperties(config);
+
+        String content = Files.readString(config);
+        assertTrue(content.contains("Separate aliases with commas"));
+        assertTrue(content.contains("command.aliases="));
     }
 }
