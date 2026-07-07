@@ -16,6 +16,8 @@ The Bukkit-compatible jar is intended for Minecraft `1.8.9` through `26.2` on se
 
 Forge `61` requires Java 21. Bukkit-compatible and Fabric artifacts target Java 17 bytecode.
 
+Fabric and Forge artifacts are server-side only. Players do not need to install them on their clients.
+
 ## Build
 
 Building all modules requires JDK 21.

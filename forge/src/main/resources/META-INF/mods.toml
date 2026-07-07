@@ -9,6 +9,7 @@ version="${version}"
 displayName="Simple Kill Command"
 displayURL="https://github.com/yesidodo73/Simple-Kill-Plugin"
 authors="yesidodo73"
+displayTest="IGNORE_SERVER_VERSION"
 description='''Configurable self-kill command for Forge servers.'''
 
 [[dependencies.simplekillcommand]]
