@@ -15,6 +15,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -105,7 +106,11 @@ public final class SimpleKillCommandBukkitPlugin extends JavaPlugin {
 
         try {
             Map<String, Command> knownCommands = getKnownCommands(commandMap);
-            knownCommands.entrySet().removeIf(entry -> entry.getValue() == command);
+            for (String label : new LinkedHashSet<>(knownCommands.keySet())) {
+                if (knownCommands.get(label) == command) {
+                    knownCommands.remove(label);
+                }
+            }
             command.unregister(commandMap);
             restoreReplacedCommands(knownCommands);
         } catch (RuntimeException exception) {
