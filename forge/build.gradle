@@ -16,6 +16,3 @@ repositories {
 }
 dependencies { implementation minecraft.dependency("net.minecraftforge:forge:${mc}-${loader}") }
 sourceSets.main.java.srcDir "src/${(loader.tokenize('.')[0] as int) >= 56 ? 'modern' : 'legacy'}/java"
-if (rootProject.serverTest) {
-    sourceSets.main.java.srcDir "src/${(loader.tokenize('.')[0] as int) >= 56 ? 'modern' : 'legacy'}/serverTest/java"
-}

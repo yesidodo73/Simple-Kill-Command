@@ -9,7 +9,6 @@ ext.supportedVersions = new groovy.json.JsonSlurper().parse(file("gradle/minecra
 ext.minecraftVersion = providers.gradleProperty("minecraftVersion").get()
 ext.targetVersion = supportedVersions[minecraftVersion]
 if (targetVersion == null) { throw new GradleException("Unsupported Minecraft version: ${minecraftVersion}") }
-ext.serverTest = providers.gradleProperty("serverTest").map { it.toBoolean() }.getOrElse(false)
 
 allprojects {
     group = "com.simplekillcommand"

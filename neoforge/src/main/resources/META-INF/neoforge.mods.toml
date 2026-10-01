@@ -24,5 +24,3 @@ type="required"
 versionRange="[${minecraftVersion}]"
 ordering="NONE"
 side="SERVER"
-
-${testMod}

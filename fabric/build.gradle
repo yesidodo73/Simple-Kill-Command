@@ -11,13 +11,5 @@ dependencies {
     }
 }
 if (obfuscated) {
-    tasks.named("remapJar") { archiveClassifier = rootProject.serverTest ? "smoke" : "" }
-}
-if (rootProject.serverTest) {
-    processResources.doLast {
-        def metadata = file("${destinationDir}/fabric.mod.json")
-        def json = new groovy.json.JsonSlurper().parse(metadata)
-        json.mixins.add("simplekillcommand-test.mixins.json")
-        metadata.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
-    }
+    tasks.named("remapJar") { archiveClassifier = "" }
 }

@@ -1,6 +1,0 @@
-{
-  "required": true,
-  "package": "com.simplekillcommand.test.fabric",
-  "mixins": ["ServerTestMixin"],
-  "injectors": {"defaultRequire": 1}
-}
