@@ -6,12 +6,8 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public final class SimpleKillCommandFabricMod implements ModInitializer {
-    private static final Logger LOGGER = Logger.getLogger(SimpleKillCommandSettings.MOD_ID);
-
     private static volatile SimpleKillCommandSettings settings = SimpleKillCommandSettings.defaults();
 
     @Override
@@ -28,8 +24,7 @@ public final class SimpleKillCommandFabricMod implements ModInitializer {
         try {
             return SimpleKillCommandSettings.loadProperties(configPath);
         } catch (IOException | RuntimeException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to load Simple Kill Command config.", exception);
-            return SimpleKillCommandSettings.defaults();
+            throw new IllegalStateException("Could not load Simple Kill Command configuration.", exception);
         }
     }
 }

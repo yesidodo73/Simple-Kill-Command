@@ -93,8 +93,7 @@ public final class SimpleKillCommandBukkitPlugin extends JavaPlugin {
         command = new KillCommand(this, settings);
         boolean registered = commandMap.register(getName().toLowerCase(Locale.ROOT), command);
         if (!registered) {
-            command = null;
-            restoreReplacedCommands(knownCommands);
+            unregisterCommand();
             throw new IllegalStateException("Could not register '/" + settings.commandName() + "'.");
         }
     }
@@ -132,12 +131,16 @@ public final class SimpleKillCommandBukkitPlugin extends JavaPlugin {
 
     private void kill(Player player) {
         Runnable action = () -> {
-            if (player.isDead()) {
-                player.sendMessage(color(settings.alreadyDeadMessage()));
-                return;
+            try {
+                if (player.isDead()) {
+                    player.sendMessage(color(settings.alreadyDeadMessage()));
+                    return;
+                }
+                player.setHealth(0.0D);
+            } catch (RuntimeException exception) {
+                getLogger().log(Level.SEVERE, "Failed to execute self-kill command.", exception);
+                player.sendMessage(color(settings.internalErrorMessage()));
             }
-
-            player.setHealth(0.0D);
         };
 
         try {
@@ -238,6 +241,11 @@ public final class SimpleKillCommandBukkitPlugin extends JavaPlugin {
 
             if (!(sender instanceof Player)) {
                 sender.sendMessage(color(settings.playerOnlyMessage()));
+                return true;
+            }
+
+            if (args.length != 0) {
+                sender.sendMessage(getUsage());
                 return true;
             }
 

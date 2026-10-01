@@ -24,4 +24,7 @@ processResources {
 
 jar {
     archiveBaseName = "SimpleKillCommand-Bukkit"
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+    from(rootProject.file("LICENSE"))
 }

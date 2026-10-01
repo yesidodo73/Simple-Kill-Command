@@ -1,7 +1,7 @@
 package com.simplekillcommand.common;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -69,7 +69,7 @@ public final class SimpleKillCommandSettings {
         Properties properties = new Properties();
 
         if (Files.exists(path)) {
-            try (InputStream input = Files.newInputStream(path)) {
+            try (Reader input = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
                 properties.load(input);
             }
         } else {
@@ -85,7 +85,7 @@ public final class SimpleKillCommandSettings {
                 .aliases(parseAliases(properties.getProperty("command.aliases", "")))
                 .overrideExisting(Boolean.parseBoolean(properties.getProperty("command.override-existing", "true")))
                 .permission(properties.getProperty("command.permission", ""))
-                .permissionLevel(parseInt(properties.getProperty("command.permission-level", "0"), 0))
+                .permissionLevel(parsePermissionLevel(properties.getProperty("command.permission-level", "0")))
                 .playerOnlyMessage(properties.getProperty("messages.player-only", DEFAULT_PLAYER_ONLY_MESSAGE))
                 .alreadyDeadMessage(properties.getProperty("messages.already-dead", DEFAULT_ALREADY_DEAD_MESSAGE))
                 .noPermissionMessage(properties.getProperty("messages.no-permission", DEFAULT_NO_PERMISSION_MESSAGE))
@@ -190,11 +190,11 @@ public final class SimpleKillCommandSettings {
         return aliases;
     }
 
-    private static int parseInt(String value, int fallback) {
+    private static int parsePermissionLevel(String value) {
         try {
             return Integer.parseInt(trim(value));
-        } catch (NumberFormatException ignored) {
-            return fallback;
+        } catch (NumberFormatException exception) {
+            throw new IllegalArgumentException("command.permission-level must be an integer from 0 to 4.", exception);
         }
     }
 

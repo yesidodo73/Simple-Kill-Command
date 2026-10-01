@@ -1,0 +1,34 @@
+def mc = rootProject.minecraftVersion
+def target = rootProject.targetVersion
+def smoke = rootProject.serverTest
+
+layout.buildDirectory = file("build/${mc}${smoke ? '-smoke' : ''}")
+java.toolchain.languageVersion = JavaLanguageVersion.of(target.java as int)
+tasks.withType(JavaCompile).configureEach { options.release = target.java as int }
+def platformName = [fabric: "Fabric", forge: "Forge", neoforge: "NeoForge"][project.name]
+base.archivesName = "SimpleKillCommand-${platformName}-mc${mc}"
+tasks.withType(Jar).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+    if (smoke) { archiveClassifier = "smoke" }
+    from(rootProject.file("LICENSE"))
+}
+sourceSets.main.java {
+    srcDir project(":common").file("src/main/java")
+    srcDir rootProject.file("minecraft/src/main/java")
+    srcDir rootProject.file("minecraft/src/${mc == '1.21.11' || target.java == 25 ? 'modern' : 'legacy'}/java")
+    srcDir rootProject.file("minecraft/src/${mc in ['1.21', '1.21.1'] ? 'kill-legacy' : 'kill-modern'}/java")
+    if (smoke) {
+        srcDir rootProject.file("server-test/src/main/java")
+        srcDir "src/serverTest/java"
+    }
+}
+if (smoke) { sourceSets.main.resources.srcDir "src/serverTest/resources" }
+def properties = [version: project.version, minecraftVersion: mc, javaVersion: target.java,
+                  forgeVersion: target.forge ?: "", forgeMajor: (target.forge ?: "0").tokenize('.')[0],
+                  neoForgeVersion: target.neoforge, testMod: smoke ? rootProject.file("server-test/mods.toml").text : ""]
+processResources {
+    filteringCharset = "UTF-8"
+    inputs.properties(properties)
+    filesMatching(["fabric.mod.json", "simplekillcommand.mixins.json", "META-INF/mods.toml", "META-INF/neoforge.mods.toml"]) { expand(properties) }
+}

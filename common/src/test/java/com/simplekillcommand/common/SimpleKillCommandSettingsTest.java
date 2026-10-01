@@ -58,6 +58,21 @@ final class SimpleKillCommandSettingsTest {
     }
 
     @Test
+    void rejectsMalformedPermissionLevelInsteadOfAllowingEveryone() throws Exception {
+        Path config = tempDir.resolve("simplekillcommand.properties");
+        Files.writeString(config, "command.permission-level=two");
+        assertThrows(IllegalArgumentException.class, () -> SimpleKillCommandSettings.loadProperties(config));
+    }
+
+    @Test
+    void readsUtf8MessagesWithoutCorruption() throws Exception {
+        Path config = tempDir.resolve("simplekillcommand.properties");
+        String message = "\uD50C\uB808\uC774\uC5B4\uB9CC \uC0AC\uC6A9\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.";
+        Files.writeString(config, "messages.player-only=" + message);
+        assertEquals(message, SimpleKillCommandSettings.loadProperties(config).playerOnlyMessage());
+    }
+
+    @Test
     void writesAliasSeparatorHintToDefaultProperties() throws Exception {
         Path config = tempDir.resolve("simplekillcommand.properties");
 

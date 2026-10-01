@@ -38,6 +38,12 @@ dependencyResolutionManagement {
 rootProject.name = "Simple-Kill-Command"
 
 include("common")
-include("bukkit")
-include("fabric")
-include("forge")
+def platform = providers.gradleProperty("platform").getOrElse("all")
+if (!(platform in ["all", "bukkit", "fabric", "forge", "neoforge"])) {
+    throw new GradleException("Unknown platform: ${platform}")
+}
+def mc = providers.gradleProperty("minecraftVersion").get()
+def matrix = new groovy.json.JsonSlurper().parse(file("gradle/minecraft-versions.json"))
+["bukkit", "fabric", "forge", "neoforge"].findAll {
+    (platform == "all" || platform == it) && !(platform == "all" && it == "forge" && matrix[mc]?.forge == null)
+}.each { include(it) }

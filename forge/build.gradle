@@ -1,42 +1,21 @@
 plugins {
     id "java"
+    id "net.minecraftforge.gradle"
 }
-
-def modVersion = version.toString()
-
-base {
-    archivesName = "SimpleKillCommand-Forge"
+def mc = rootProject.minecraftVersion
+def loader = rootProject.targetVersion.forge
+if (loader == null) { throw new GradleException("Forge is not published for Minecraft ${mc}.") }
+apply from: rootProject.file("gradle/minecraft-module.gradle")
+minecraft {
+    if (rootProject.targetVersion.java == 21) { mappings channel: 'official', version: mc }
 }
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
 }
-
-tasks.withType(JavaCompile).configureEach {
-    options.release = 21
-}
-
-dependencies {
-    compileOnly "net.minecraftforge:forge:1.21.11-61.1.8:universal"
-    compileOnly "net.minecraftforge:javafmllanguage:1.21.11-61.1.8"
-    compileOnly "net.minecraftforge:eventbus:7.0.1"
-    compileOnly "com.mojang:brigadier:1.3.10"
-}
-
-sourceSets {
-    main {
-        java.srcDir(project(":common").file("src/main/java"))
-    }
-}
-
-processResources {
-    filteringCharset = "UTF-8"
-    inputs.property("version", modVersion)
-    filesMatching("META-INF/mods.toml") {
-        expand(version: modVersion)
-    }
-}
-
-jar {
+dependencies { implementation minecraft.dependency("net.minecraftforge:forge:${mc}-${loader}") }
+sourceSets.main.java.srcDir "src/${(loader.tokenize('.')[0] as int) >= 56 ? 'modern' : 'legacy'}/java"
+if (rootProject.serverTest) {
+    sourceSets.main.java.srcDir "src/${(loader.tokenize('.')[0] as int) >= 56 ? 'modern' : 'legacy'}/serverTest/java"
 }

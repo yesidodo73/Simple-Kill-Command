@@ -1,0 +1,11 @@
+plugins {
+    id "java"
+    id "net.neoforged.moddev"
+}
+apply from: rootProject.file("gradle/minecraft-module.gradle")
+neoForge {
+    enable {
+        version = rootProject.targetVersion.neoforge
+        disableRecompilation = true
+    }
+}

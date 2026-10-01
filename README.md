@@ -4,33 +4,42 @@ Configurable self-kill command for Minecraft servers.
 
 By default, players can run `/kill` without OP permission. The command only kills the player who runs it; it does not accept targets.
 
-## Artifacts
+## Installation
 
-| Platform | Jar | Output | Target |
-| --- | --- | --- | --- |
-| Bukkit-compatible | `SimpleKillCommand-Bukkit` | `bukkit/build/libs/` | Bukkit, CraftBukkit, Spigot, Paper, Purpur, Pufferfish, Leaf/Leaves, Folia |
-| Fabric | `SimpleKillCommand-Fabric` | `fabric/build/libs/` | Fabric Loader `0.19.3+`, Minecraft `1.21.11` |
-| Forge | `SimpleKillCommand-Forge` | `forge/build/libs/` | Forge `61+`, Minecraft `1.21.11` |
+| Platform | Artifact | Install in |
+| --- | --- | --- |
+| Bukkit, Spigot, Paper, Folia and compatible forks | `SimpleKillCommand-Bukkit-<version>.jar` | `plugins/` |
+| Fabric | `SimpleKillCommand-Fabric-mc<MC>-<version>.jar` | `mods/` |
+| Forge | `SimpleKillCommand-Forge-mc<MC>-<version>.jar` | `mods/` |
+| NeoForge | `SimpleKillCommand-NeoForge-mc<MC>-<version>.jar` | `mods/` |
 
-The Bukkit-compatible jar is intended for Minecraft `1.8.9` through `26.2` on servers that run Java 17 or newer. Fabric and Forge builds are version-specific and should be rebuilt for each additional Minecraft version.
+Install one jar matching your server software. Mod builds must match the exact Minecraft version; clients do not need the mod. Fabric, Forge and NeoForge builds run on dedicated servers, not in singleplayer.
 
-Forge `61` requires Java 21. Bukkit-compatible and Fabric artifacts target Java 17 bytecode.
+Bukkit compatibility targets Minecraft `1.8.9` through `26.3`, with Java 17 or newer. Mod builds cover individual releases from `1.21` through `26.3`; Forge is unavailable for `1.21.2`. Tested loader versions are listed in [the build matrix](gradle/minecraft-versions.json).
 
-Fabric and Forge artifacts are server-side only. Players do not need to install them on their clients.
+Dedicated-server checks cover all 50 mod variants, 15 Paper versions and 7 Folia versions. Network-client checks exclude `26.2` and `26.3` because the test client lacks protocol support. Older Bukkit versions and other compatible forks have not been revalidated in this release. Forge `1.21.9` may hang during shutdown, including without this mod; intermittent shutdown delays were also observed on Forge `1.21`.
+
+Minecraft `1.21` through `1.21.11` mod servers require Java 21; `26.x` requires Java 25. Bukkit targets Java 17 bytecode, and shared configuration source uses Java 17 APIs.
 
 ## Build
 
-Building all modules requires JDK 21.
+Install JDK 21 and JDK 25, and run Gradle with JDK 25. The wrapper downloads Gradle automatically.
 
 ```shell
 ./gradlew build
 ```
 
-On Windows:
+This builds Bukkit and the default Minecraft `1.21.11` mod variants. For another Minecraft version:
 
-```powershell
-.\gradlew.bat build
+```shell
+./gradlew "-Pplatform=fabric" "-PminecraftVersion=26.3" :fabric:build
 ```
+
+Replace `fabric` with `forge` or `neoforge` for that loader. On Windows, use `gradlew.bat`.
+
+Omit `-Pplatform` to build all available platforms for the selected Minecraft version. Forge is skipped for `1.21.2`.
+
+Jars are written to `bukkit/build/libs/` and `<loader>/build/<MC>/libs/`. Do not distribute `-dev`, `-smoke`, or `server-test` jars.
 
 ## Configuration
 
@@ -53,7 +62,7 @@ command:
 
 `command.permission` is a Bukkit permission node. Leave it empty to allow every player to use the command.
 
-### Fabric and Forge
+### Fabric, Forge and NeoForge
 
 `config/simplekillcommand.properties`
 
@@ -61,15 +70,12 @@ command:
 command.name=kill
 command.aliases=
 command.override-existing=true
-command.permission=
 command.permission-level=0
 ```
 
-`command.aliases` is comma-separated in the Fabric and Forge properties file. Example: `command.aliases=suicide,selfkill`.
+`command.aliases` is comma-separated: `command.aliases=suicide,selfkill`.
 
 `command.permission-level` is the Minecraft command permission level, clamped to `0` through `4`. Leave it at `0` to allow every player to use the command.
-
-`command.permission` is not used by the Fabric and Forge builds.
 
 Example:
 
@@ -78,7 +84,7 @@ command.name=suicide
 command.aliases=kill
 ```
 
-Messages can also be changed in the generated config.
+Messages can be changed in the generated UTF-8 config. Color and formatting codes such as `&c` and `&l` are supported. Restart the server after editing the config. Invalid mod configuration prevents startup instead of silently reverting permission settings.
 
 ## License
 

@@ -1,6 +1,7 @@
 package com.simplekillcommand.fabric.mixin;
 
-import com.simplekillcommand.fabric.SimpleKillCommandFabricCommands;
+import com.simplekillcommand.fabric.SimpleKillCommandFabricMod;
+import com.simplekillcommand.minecraft.KillCommands;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.Commands;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,6 @@ public abstract class CommandsMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void simplekillcommand$register(Commands.CommandSelection commandSelection, CommandBuildContext context, CallbackInfo info) {
-        SimpleKillCommandFabricCommands.register(((Commands) (Object) this).getDispatcher());
+        KillCommands.register(((Commands) (Object) this).getDispatcher(), SimpleKillCommandFabricMod.settings());
     }
 }

@@ -8,7 +8,7 @@
     "yesidodo73"
   ],
   "contact": {
-    "sources": "https://github.com/yesidodo73/Simple-Kill-Plugin"
+    "sources": "https://github.com/yesidodo73/Simple-Kill-Command"
   },
   "license": "MIT",
   "environment": "server",
@@ -21,7 +21,8 @@
     "simplekillcommand.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.19.3",
-    "minecraft": "1.21.11"
+    "fabricloader": ">=0.19.5",
+    "minecraft": "=${minecraftVersion}",
+    "java": ">=${javaVersion}"
   }
 }

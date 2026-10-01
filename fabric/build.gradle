@@ -1,32 +1,23 @@
-plugins {
-    id "fabric-loom"
-}
-
-def modVersion = version.toString()
-
-base {
-    archivesName = "SimpleKillCommand-Fabric"
-}
-
+def obfuscated = rootProject.targetVersion.java == 21
+apply plugin: obfuscated ? "net.fabricmc.fabric-loom-remap" : "net.fabricmc.fabric-loom"
+apply from: rootProject.file("gradle/minecraft-module.gradle")
 dependencies {
-    minecraft "com.mojang:minecraft:1.21.11"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:0.19.3"
-}
-
-sourceSets {
-    main {
-        java.srcDir(project(":common").file("src/main/java"))
+    minecraft "com.mojang:minecraft:${rootProject.minecraftVersion}"
+    if (obfuscated) {
+        mappings loom.officialMojangMappings()
+        modImplementation "net.fabricmc:fabric-loader:0.19.5"
+    } else {
+        implementation "net.fabricmc:fabric-loader:0.19.5"
     }
 }
-
-processResources {
-    filteringCharset = "UTF-8"
-    inputs.property("version", modVersion)
-    filesMatching("fabric.mod.json") {
-        expand(version: modVersion)
-    }
+if (obfuscated) {
+    tasks.named("remapJar") { archiveClassifier = rootProject.serverTest ? "smoke" : "" }
 }
-
-jar {
+if (rootProject.serverTest) {
+    processResources.doLast {
+        def metadata = file("${destinationDir}/fabric.mod.json")
+        def json = new groovy.json.JsonSlurper().parse(metadata)
+        json.mixins.add("simplekillcommand-test.mixins.json")
+        metadata.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+    }
 }

@@ -1,0 +1,5 @@
+[[mods]]
+modId="simplekillcommand_test"
+version="1.0.0"
+displayName="Simple Kill Command Server Tests"
+description='''Dedicated server regression tests. Not for distribution.'''
