@@ -4,19 +4,6 @@ Configurable self-kill command for Minecraft servers.
 
 By default, players can run `/kill` without OP permission. The command only kills the player who runs it; it does not accept targets.
 
-## Installation
-
-| Platform | Artifact | Install in |
-| --- | --- | --- |
-| Bukkit, Spigot, Paper, Folia and compatible forks | `SimpleKillCommand-Bukkit-<version>.jar` | `plugins/` |
-| Fabric | `SimpleKillCommand-Fabric-mc<MC>-<version>.jar` | `mods/` |
-| Forge | `SimpleKillCommand-Forge-mc<MC>-<version>.jar` | `mods/` |
-| NeoForge | `SimpleKillCommand-NeoForge-mc<MC>-<version>.jar` | `mods/` |
-
-Bukkit compatibility targets Minecraft `1.8.9` through `26.3` and requires Java 17 or newer. Fabric, Forge and NeoForge builds cover `1.21` through `26.3` and run on dedicated servers; clients do not need the mod. Forge is unavailable for `1.21.2`.
-
-Mod servers require Java 21 for `1.21.x` and Java 25 for `26.x`.
-
 ## Build
 
 Install JDK 21 and JDK 25, and run Gradle with JDK 25.
